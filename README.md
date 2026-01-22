@@ -1,13 +1,15 @@
-# Boxflow Obsidian📦
+<div align="center">
 
-[![Obsidian Downloads](https://img.shields.io/badge/Obsidian-v0.15.0+-8c32ff?logo=obsidian&logoColor=white)](https://obsidian.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<img src="./assets/logo.jpg"  width="300" />
 
 **The most satisfying visual progress tracker for Obsidian.** Map your workflows into modular, colorful box grids.
 
-![Boxflow Banner](placeholders/banner.png)
+</div>
 
 ## Why Boxflow?
+
+[![Obsidian Downloads](https://img.shields.io/badge/Obsidian-v0.15.0+-8c32ff?logo=obsidian&logoColor=white)](https://obsidian.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Traditional task managers can feel like a chore. Boxflow turns your Obsidian notes into interactive, gamified boards. It's the perfect bridge between a simple checklist and a complex database.
 
