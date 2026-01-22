@@ -3,35 +3,58 @@ name: Release Obsidian Plugin
 on:
   push:
     branches:
-      - master
+      - main
+    tags:
+      - "v*"
 
 permissions:
   contents: write
-  issues: write
-  pull-requests: write
 
 jobs:
-  release:
+  version-and-release:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
-      - name: Build
-        run: npm run build
-
-      - name: Create Release
-        run: npx semantic-release
+      - name: Run Release (Versioning & Tagging)
+        if: "github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore: release')"
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          pnpm run release --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # npm plugin needs this even if not publishing
+
+      - name: Build & Create Release Assets
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          pnpm run build
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            main.js
+            manifest.json
+            styles.css
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

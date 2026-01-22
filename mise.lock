@@ -7,6 +7,14 @@ backend = "aqua:cocogitto/cocogitto"
 "platforms.macos-x64" = { checksum = "sha256:ddad1e62028e328db6e373232ff9166f21dfeadfe2c8784f327e88f46081fab4", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-x86_64-apple-darwin.tar.gz"}
 "platforms.windows-x64" = { checksum = "sha256:ee4570d25e31393b88518af570f54e97f89e07346d545809e0c7404e8d076245", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-x86_64-pc-windows-msvc.tar.gz"}
 
+[[tools.lefthook]]
+version = "2.0.15"
+backend = "aqua:evilmartians/lefthook"
+"platforms.linux-arm64" = { checksum = "sha256:5f9dd0d87b32d175495bbb9fc5ebdce9753ffd4b028fc2b62661378fbc27b82e", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.15/lefthook_2.0.15_Linux_aarch64.gz"}
+"platforms.linux-x64" = { checksum = "sha256:b8a19b19a8982d5d32ee23e9d6c4df4a2a9cd6e615c8728c589911bdda0c7500", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.15/lefthook_2.0.15_Linux_x86_64.gz"}
+"platforms.macos-x64" = { checksum = "sha256:93ed50828ed60bd034523dfb736282eecd7649ef22fde9cddc8083bfddc50752", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.15/lefthook_2.0.15_MacOS_x86_64.gz"}
+"platforms.windows-x64" = { checksum = "sha256:355d332b16f9a3898f8243f0eb18a20e06379ec9d82aa7c345163dc26f40dfeb", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.15/lefthook_2.0.15_Windows_x86_64.gz"}
+
 [[tools.node]]
 version = "25.3.0"
 backend = "core:node"
@@ -15,3 +23,12 @@ backend = "core:node"
 "platforms.macos-arm64" = { checksum = "sha256:d80f384c182971724a7aa819173084e1d8244338fa8e9271a1961d38274d7209", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-darwin-arm64.tar.gz"}
 "platforms.macos-x64" = { checksum = "sha256:d6d494e5deca973556e146555cdd29b927b0adb3cae2f234b8e1a92310657c39", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-darwin-x64.tar.gz"}
 "platforms.windows-x64" = { checksum = "sha256:3c138ba2cd835b1af70ae2813422f544b2e786bdff8c0885ffb89fb7d407148e", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-win-x64.zip"}
+
+[[tools.pnpm]]
+version = "10.28.1"
+backend = "aqua:pnpm/pnpm"
+"platforms.linux-arm64" = { checksum = "sha256:bbc6860d6c7eb33bcafe670874323cd6617b03e46f8b34163bb0691eac8156f3", url = "https://github.com/pnpm/pnpm/releases/download/v10.28.1/pnpm-linux-arm64"}
+"platforms.linux-x64" = { checksum = "sha256:e1a90745bbab7aad1de6886e5c6da978463fe8382953d1406e0e30661d0613a1", url = "https://github.com/pnpm/pnpm/releases/download/v10.28.1/pnpm-linux-x64"}
+"platforms.macos-arm64" = { checksum = "sha256:6c123dcd8c7eab530f51f0544e7c893a5249cabda5a9469db63262cc7a738fcb", url = "https://github.com/pnpm/pnpm/releases/download/v10.28.1/pnpm-macos-arm64"}
+"platforms.macos-x64" = { checksum = "sha256:11cc2b5c9e6f0e1d6e2bfb414e0db3d26f07378a76c2c045ec9dbecc91050bd4", url = "https://github.com/pnpm/pnpm/releases/download/v10.28.1/pnpm-macos-x64"}
+"platforms.windows-x64" = { checksum = "sha256:6205534c0e8acd0cc3a2da48ee8a3ece33e7e170ab84880f888edca51a795312", url = "https://github.com/pnpm/pnpm/releases/download/v10.28.1/pnpm-win-x64.exe"}

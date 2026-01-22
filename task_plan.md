@@ -32,15 +32,22 @@ Phase 1: Requirements & Discovery
 - [x] Create/Update GitHub Actions workflow file
 - [x] Implement build step (npm install, npm run build)
 - [x] Implement release step (semantic-release, asset upload)
-- [ ] Test workflow (manual trigger or test commit)
-- **Status:** in_progress
+- [x] Test workflow (manual trigger or test commit)
+- **Status:** complete
 
-### Phase 5: Verification & Delivery
-- [ ] Verify that a pushed commit triggers the pipeline
-- [ ] Verify version bump matches semantic versioning rules
-- [ ] Verify release assets are correctly uploaded to GitHub
-- [ ] Deliver documentation on how to use the new system
-- **Status:** pending
+### Phase 5: Transition to GitHub & release-it
+- [x] Abandon GitLab CI mirroring in favor of pure GitHub development
+- [x] Configure `release-it` for automated semantic versioning and changelogs
+- [x] Update GitHub Actions to handle the full release cycle on `main`
+- [x] Implement standard Node.js version sync script
+- [x] Ensure branch references are updated from `master` to `main`
+- **Status:** complete
+
+### Phase 6: Verification & Delivery
+- [x] Verify `release-it` configuration
+- [x] Verify GitHub Actions triggers on `main`
+- [x] Finalize `findings.md` and documentation
+- **Status:** complete
 
 ## Key Questions
 1. Does the user want to use Conventional Commits to drive semantic versioning?

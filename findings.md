@@ -17,8 +17,11 @@
 ## Technical Decisions
 | Decision | Rationale |
 |----------|-----------|
-| Use `semantic-release` | Industry standard for automated semantic versioning and releases. |
-| Use Conventional Commits | Required for `semantic-release` to parse commit types (feat, fix). |
+| GitHub Actions as Primary | Development happens on GitHub; all automation (versioning, releasing) is centralized here. |
+| `release-it` | Standard Node.js tool for semantic versioning, robust and highly configurable. |
+| `@release-it/conventional-changelog` | Automates version detection and changelog maintenance using Conventional Commits. |
+| `pnpm` | Preferred efficient package manager. |
+| Automated Publishing | GitHub Actions handles version bumping on `main` and asset building on tag creation. |
 
 ## Issues Encountered
 | Issue | Resolution |

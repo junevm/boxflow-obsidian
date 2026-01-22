@@ -1,6 +1,6 @@
 [tools]
 node = "latest"
-cocogitto = "latest"
+pnpm = "latest"
 
 [hooks]
 postinstall = ["mise lock"]

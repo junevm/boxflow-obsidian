@@ -2,7 +2,6 @@
 
 [![Obsidian Downloads](https://img.shields.io/badge/Obsidian-v0.15.0+-8c32ff?logo=obsidian&logoColor=white)](https://obsidian.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitLab CI](https://img.shields.io/badge/CI-GitLab-orange?logo=gitlab)](https://gitlab.com/junevm/boxflow-obsidian)
 
 **The most satisfying visual progress tracker for Obsidian.** Map your workflows into modular, colorful box grids.
 
@@ -94,10 +93,7 @@ Break down massive goals (like writing a book or finishing a thesis) into manage
 
 ## Development & Contributing
 
-Primary development happens on **GitLab**, while our GitHub repo acts as a mirror for Obsidian community distribution.
-
-- **Main Repo**: [https://gitlab.com/junevm/boxflow-obsidian](https://gitlab.com/junevm/boxflow-obsidian)
-- **Mirror (for releases)**: [https://github.com/junevm/boxflow-obsidian](https://github.com/junevm/boxflow-obsidian)
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to set up the development environment and submit changes.
 
 ### Local Setup
 

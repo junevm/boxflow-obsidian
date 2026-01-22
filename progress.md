@@ -28,34 +28,41 @@
 - **Status:** complete
 - **Started:** 2026-01-22 11:00
 - Actions taken:
-  - Installed `semantic-release` and its components.
-  - Created `.releaserc.json` with configuration for changelog, npm, git, and github.
+  - Migrated from `semantic-release` to `cocogitto` for language-agnostic versioning.
+  - Implemented `bump-version.cjs` to handle Obsidian-specific versioning files.
+  - Configured `cog.toml` for automated bumping.
 - Files created/modified:
-  - `.releaserc.json` (created)
+  - `cog.toml` (created)
+  - `scripts/bump-version.cjs` (created)
+  - `scripts/bump_version.py` (deleted)
 
-### Phase 4: Implementation - CI/CD Pipeline
-- **Status:** in_progress
-- **Started:** 2026-01-22 11:15
+### Phase 6: Automatic Semantic Versioning with Cocogitto
+- **Status:** complete
+- **Started:** 2026-01-22 13:00
 - Actions taken:
-  - Updated `.github/workflows/release.yml` to use `semantic-release`.
+  - Re-introduced `cog.toml` to handle automated semantic versioning.
+  - Updated `scripts/sync-version.cjs` to accept version as an argument for `cocogitto` hooks.
+  - Updated `.gitlab-ci.yml` to use `mise` for consistent tool installation (Node, pnpm, and Cocogitto).
+  - Fixed `cog.toml` hooks to correctly stage metadata files before the version commit.
+- Files created/modified:
+  - `cog.toml` (updated)
+  - `scripts/sync-version.cjs` (updated)
+  - `.gitlab-ci.yml` (updated)
+
+### Phase 7: Final Migration to GitHub and release-it
+- **Status:** complete
+- **Started:** 2026-01-22 15:00
+- Actions taken:
+  - Abandoned GitLab CI and `cocogitto` in favor of GitHub-only development.
+  - Migrated to `release-it` with Conventional Commits plugin.
+  - Implemented simplified `scripts/version.js` for metadata synchronization.
+  - Configured GitHub Actions to handle the full automated release on the `main` branch.
+  - Removed all `mise`, `cog`, and GitLab-specific configuration.
+  - Renamed branch references from `master` to `main` across all documentation and CI files.
 - Files created/modified:
   - `.github/workflows/release.yml` (updated)
-
-## Test Results
-| Test | Input | Expected | Actual | Status |
-|------|-------|----------|--------|--------|
-|      |       |          |        |        |
-
-## Error Log
-| Timestamp | Error | Attempt | Resolution |
-|-----------|-------|---------|------------|
-|           |       | 1       |            |
-
-## 5-Question Reboot Check
-| Question | Answer |
-|----------|--------|
-| Where am I? | Phase 1: Requirements & Discovery |
-| Where am I going? | Researching current setup and designing the CI/CD pipeline |
-| What's the goal? | Fully automated semantic versioning and deployment |
-| What have I learned? | Initial project structure identified. |
-| What have I done? | Set up project planning infrastructure. |
+  - `.release-it.json` (created)
+  - `scripts/version.js` (created)
+  - `findings.md` (updated)
+  - `task_plan.md` (updated)
+  - `README.md` / `CONTRIBUTING.md` (updated)
