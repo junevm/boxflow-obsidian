@@ -1,7 +1,7 @@
-import tseslint from 'typescript-eslint';
 import obsidianmd from "eslint-plugin-obsidianmd";
-import globals from "globals";
 import { globalIgnores } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default tseslint.config(
 	{
@@ -12,13 +12,13 @@ export default tseslint.config(
 			parserOptions: {
 				projectService: {
 					allowDefaultProject: [
-						'eslint.config.js',
-						'manifest.json',
-						'scripts/version.js',
-					]
+						"eslint.config.js",
+						"manifest.json",
+						"scripts/version.js",
+					],
 				},
 				tsconfigRootDir: import.meta.dirname,
-				extraFileExtensions: ['.json']
+				extraFileExtensions: [".json"],
 			},
 		},
 	},
@@ -36,19 +36,19 @@ export default tseslint.config(
 			"obsidianmd/ui/sentence-case": "off",
 			"obsidianmd/commands/no-plugin-id-in-command-id": "off",
 			"obsidianmd/commands/no-plugin-name-in-command-name": "off",
-		}
+		},
 	},
 	{
-		files: ['scripts/**/*.js'],
+		files: ["scripts/**/*.js"],
 		languageOptions: {
 			globals: {
 				...globals.node,
 			},
 		},
 		rules: {
-			'no-console': 'off',
-			'import/no-nodejs-modules': 'off',
-			'@typescript-eslint/no-require-imports': 'off',
+			"no-console": "off",
+			"import/no-nodejs-modules": "off",
+			"@typescript-eslint/no-require-imports": "off",
 		},
 	},
 	globalIgnores([

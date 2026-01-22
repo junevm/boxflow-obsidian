@@ -1377,8 +1377,6 @@ class BoxflowSettingsTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		;
-
 		new Setting(containerEl)
 			.setName("Show percentage")
 			.setDesc("Show progress percentage next to the count")
