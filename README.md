@@ -8,18 +8,17 @@
 
 ## Why Boxflow?
 
-[![Obsidian Downloads](https://img.shields.io/badge/Obsidian-v0.15.0+-8c32ff?logo=obsidian&logoColor=white)](https://obsidian.md)
+[![Obsidian Downloads](https://img.shields.io/badge/Obsidian-8c32ff?logo=obsidian&logoColor=white)](https://obsidian.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Traditional task managers can feel like a chore. Boxflow turns your Obsidian notes into interactive, gamified boards. It's the perfect bridge between a simple checklist and a complex database.
-
-### 🚀 Optimize Your Workflow
 
 - **Visual Clarity**: See exactly how far you've come with high-contrast Material 3 colors.
 - **Zero Friction**: One click = one unit of progress.
 - **Seamless Integration**: Works natively with your markdown files.
 
----
+| ![Boxflow Demo](./assets/demo1.png) | ![Boxflow Demo 2](./assets/demo2.png) | ![Boxflow Demo 3](./assets/demo3.png) |
+| ----------------------------------- | ------------------------------------- | ------------------------------------- |
 
 ## ⚡ Key Features
 
