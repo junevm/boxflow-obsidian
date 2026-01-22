@@ -17,8 +17,6 @@ interface BoxflowGridProps {
     };
 }
 
-const COLORS = ["blue", "green", "purple", "orange", "red", "none"];
-
 export const BoxflowGrid: React.FC<BoxflowGridProps> = ({
     grid,
     onToggleBox,

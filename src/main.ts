@@ -200,7 +200,7 @@ class BoxflowView extends ItemView {
 							`Are you sure you want to delete "${this.file!.basename}"?`,
 						);
 						if (confirmed) {
-							await this.app.vault.trash(this.file!, true);
+							await this.app.fileManager.trashFile(this.file!);
 						}
 					});
 			});
@@ -277,7 +277,9 @@ class BoxflowView extends ItemView {
 				if (data.config?.showPercentage !== undefined) {
 					showPercentage = data.config.showPercentage;
 				}
-			} catch (e) {}
+			} catch {
+				// Ignore parse errors
+			}
 		}
 
 		const container = this.contentEl;
@@ -346,7 +348,7 @@ class BoxflowView extends ItemView {
 				`Are you sure you want to delete "${this.file!.basename}"?`,
 			);
 			if (confirmed) {
-				await this.app.vault.trash(this.file!, true);
+				await this.app.fileManager.trashFile(this.file!);
 			}
 		});
 
@@ -787,14 +789,12 @@ export default class BoxflowPlugin extends Plugin {
 			if (line === "<!-- boxflow:start -->") {
 				// Find corresponding end and header
 				let gridEnd = -1;
-				let headerLine = -1;
 				let categoryName = "";
 
 				// Search backward for header
 				for (let h = i - 1; h >= 0; h--) {
 					const headerText = lines[h]?.trim();
 					if (headerText?.startsWith("## ")) {
-						headerLine = h;
 						categoryName = headerText.substring(3).trim();
 						break;
 					}
@@ -914,7 +914,6 @@ export default class BoxflowPlugin extends Plugin {
 		content: string,
 	): Grid | null {
 		const lines = content.split("\n");
-		let currentLine = 0;
 		let commentCount = 0;
 
 		// Count comments before this one to determine which grid this is
@@ -974,7 +973,9 @@ export default class BoxflowPlugin extends Plugin {
 				if (data.config?.showPercentage !== undefined) {
 					showPercentage = data.config.showPercentage;
 				}
-			} catch (e) {}
+			} catch {
+				// Ignore parse errors
+			}
 		}
 
 		// Create React root and render component
@@ -1238,18 +1239,15 @@ export default class BoxflowPlugin extends Plugin {
 	 */
 	insertGridAtCursor(editor: any) {
 		const cursor = editor.getCursor();
-		const line = editor.getLine(cursor.line);
 
 		// Check if we're under a header
 		let headerLine = -1;
-		let headerText = "";
 
 		for (let i = cursor.line; i >= 0; i--) {
 			const currentLine = editor.getLine(i);
 			const match = currentLine.match(/^#{1,6}\s+(.+)$/);
 			if (match) {
 				headerLine = i;
-				headerText = match[1];
 				break;
 			}
 		}
@@ -1379,7 +1377,7 @@ class BoxflowSettingsTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Boxflow Settings" });
+		;
 
 		new Setting(containerEl)
 			.setName("Show percentage")

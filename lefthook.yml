@@ -2,14 +2,14 @@
 # https://github.com/evilmartians/lefthook
 
 pre-commit:
-  parallel: true
-  commands:
-    lint:
-      run: pnpm run lint
-    test:
-      run: pnpm run test
+    parallel: true
+    commands:
+        lint:
+            run: pnpm run lint
+        test:
+            run: pnpm run test
 
 commit-msg:
-  commands:
-    "conventional commits":
-      run: npx --yes commitlint --edit {1}
+    commands:
+        "conventional commits":
+            run: npx --yes commitlint --edit {1}
