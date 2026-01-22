@@ -18,7 +18,8 @@
 		"assets": ["main.js", "manifest.json", "styles.css"]
 	},
 	"npm": {
-		"publish": false
+		"publish": false,
+		"versionArgs": ["--no-git-tag-version"]
 	},
 	"hooks": {
 		"before:bump": "node scripts/version.js ${version}",

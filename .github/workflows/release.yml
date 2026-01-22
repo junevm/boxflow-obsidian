@@ -46,8 +46,12 @@ jobs:
                   CURRENT_VERSION=$(node -p "require('./package.json').version")
                   NEXT_VERSION=$(pnpm release-it --release-version --ci)
                   if git rev-parse "v$NEXT_VERSION" >/dev/null 2>&1; then
-                    echo "Tag v$NEXT_VERSION already exists. Deleting locally to allow release-it to recreate it..."
+                    echo "Tag v$NEXT_VERSION already exists locally. Deleting..."
                     git tag -d "v$NEXT_VERSION"
+                  fi
+                  if git ls-remote --tags origin | grep -q "refs/tags/v$NEXT_VERSION"; then
+                    echo "Tag v$NEXT_VERSION already exists on remote. Deleting from origin..."
+                    git push origin :refs/tags/v$NEXT_VERSION
                   fi
                   pnpm run release --ci
               env:
