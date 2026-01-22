@@ -3,8 +3,8 @@
 	"name": "Boxflow",
 	"version": "1.3.0",
 	"minAppVersion": "0.15.0",
-	"description": "Create and manage dynamic, mobile-friendly checkbox grids in your notes. One box equals one unit of work.",
+	"description": "The most satisfying visual progress tracker. Map your workflows into modular, colorful box grids.",
 	"author": "junevm",
-	"authorUrl": "https://github.com/junevm/boxflow-obsidian",
+	"authorUrl": "https://github.com/junevm",
 	"isDesktopOnly": false
 }
