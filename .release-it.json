@@ -12,12 +12,14 @@
 		"requireCleanWorkingDir": false
 	},
 	"github": {
-		"release": false
-	},
-	"npm": {
-		"publish": false
-	},
-	"hooks": {
-		"after:bump": "node scripts/version.js ${version} && git add manifest.json versions.json"
-	}
+    "release": true,
+    "releaseName": "v${version}",
+    "assets": ["main.js", "manifest.json", "styles.css"]
+  },
+  "npm": {
+    "publish": false
+  },
+  "hooks": {
+    "after:bump": "node scripts/version.js ${version} && git add manifest.json versions.json",
+    "before:release": "pnpm run build"
 }

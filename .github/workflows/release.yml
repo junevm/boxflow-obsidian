@@ -4,16 +4,15 @@ on:
     push:
         branches:
             - main
-        tags:
-            - "v*"
+    workflow_dispatch:
 
 permissions:
     contents: write
 
 jobs:
-    version-and-release:
+    release:
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+        if: github.ref == 'refs/heads/main'
         steps:
             - uses: actions/checkout@v4
               with:
@@ -33,28 +32,11 @@ jobs:
             - name: Install dependencies
               run: pnpm install
 
-            - name: Run Release (Versioning & Tagging)
-              if: "github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore: release')"
+            - name: Run Release
+              if: "!contains(github.event.head_commit.message, 'chore: release')"
               run: |
                   git config --global user.name "github-actions[bot]"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
                   pnpm run release --ci
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Build & Create Release Assets
-              if: startsWith(github.ref, 'refs/tags/v')
-              run: |
-                  pnpm run build
-
-            - name: Create GitHub Release
-              if: startsWith(github.ref, 'refs/tags/v')
-              uses: softprops/action-gh-release@v2
-              with:
-                  files: |
-                      main.js
-                      manifest.json
-                      styles.css
-                  generate_release_notes: true
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
