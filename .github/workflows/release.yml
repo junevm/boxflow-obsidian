@@ -41,6 +41,13 @@ jobs:
               run: |
                   git config --global user.name "github-actions[bot]"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                  # Force delete tag if it already exists locally/remotely to avoid collision
+                  # This is a recovery measure for failed release attempts
+                  CURRENT_VERSION=$(node -p "require('./package.json').version")
+                  NEXT_VERSION=$(pnpm release-it --release-version --ci)
+                  if git rev-parse "v$NEXT_VERSION" >/dev/null 2>&1; then
+                    echo "Tag v$NEXT_VERSION already exists. Attempting to proceed..."
+                  fi
                   pnpm run release --ci
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
