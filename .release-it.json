@@ -9,7 +9,8 @@
 		"commitMessage": "chore: release v${version}",
 		"tagName": "v${version}",
 		"push": true,
-		"requireCleanWorkingDir": false
+		"requireCleanWorkingDir": false,
+		"addUntrackedFiles": true
 	},
 	"github": {
 		"release": true,
@@ -20,7 +21,8 @@
 		"publish": false
 	},
 	"hooks": {
-		"after:bump": "node scripts/version.js ${version} && git add manifest.json versions.json",
+		"before:bump": "node scripts/version.js ${version}",
+		"after:bump": "git add manifest.json versions.json",
 		"before:release": "pnpm run build"
 	}
 }
