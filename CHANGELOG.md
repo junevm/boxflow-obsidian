@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0](https://github.com/junevm/boxflow-obsidian/compare/v1.1.0...v1.2.0) (2026-01-22)
+
+
+### Features
+
+* **release:** update GitHub Actions for automated release process and remove deprecated files ([f9a8b61](https://github.com/junevm/boxflow-obsidian/commit/f9a8b6131e63cd9001607b40cedfd879e27ed5fd))
+
 # 1.1.0 (2026-01-22)
 
 
