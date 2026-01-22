@@ -1,0 +1,33 @@
+[tools]
+node = "latest"
+cocogitto = "latest"
+
+[hooks]
+postinstall = ["mise lock"]
+
+[env]
+DO_NOT_TRACK = "1"
+
+
+[settings]
+experimental = true
+quiet = false
+lockfile = true
+
+
+[tasks.setup]
+description = "Setup development environment"
+run = ["mise install", "npm install"]
+
+[tasks.dev]
+description = "Run development server with watch mode"
+run = "npm run dev"
+
+
+[tasks.build]
+description = "Build the plugin"
+run = "npm run build"
+
+[tasks.lint]
+description = "Lint the codebase"
+run = "npm run lint"

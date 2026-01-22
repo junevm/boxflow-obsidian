@@ -1,0 +1,10 @@
+{
+	"id": "boxflow",
+	"name": "Boxflow",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Create and manage dynamic, mobile-friendly checkbox grids in your notes. One box equals one unit of work.",
+	"author": "junevm",
+	"authorUrl": "https://github.com/junevm/boxflow",
+	"isDesktopOnly": false
+}

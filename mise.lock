@@ -1,0 +1,17 @@
+[[tools.cocogitto]]
+version = "6.5.0"
+backend = "aqua:cocogitto/cocogitto"
+"platforms.linux-arm64" = { checksum = "sha256:8f05394d82cfbba1e393cef4b822cddb6e903817478c29a03200815daed7d9f1", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-aarch64-unknown-linux-gnu.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:9de1086c8b6521a8a01abbd62c562d6d355990f542e3082b49ec4a597f925646", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-x86_64-unknown-linux-musl.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:ddad1e62028e328db6e373232ff9166f21dfeadfe2c8784f327e88f46081fab4", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-x86_64-apple-darwin.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:ddad1e62028e328db6e373232ff9166f21dfeadfe2c8784f327e88f46081fab4", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-x86_64-apple-darwin.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:ee4570d25e31393b88518af570f54e97f89e07346d545809e0c7404e8d076245", url = "https://github.com/cocogitto/cocogitto/releases/download/6.5.0/cocogitto-6.5.0-x86_64-pc-windows-msvc.tar.gz"}
+
+[[tools.node]]
+version = "25.3.0"
+backend = "core:node"
+"platforms.linux-arm64" = { checksum = "sha256:8098e098dc91ec3bf98035eeebff8d9b3e46fb9e14c1e8c377986f76e0b8368f", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-linux-arm64.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:cc91362eb9a009efa26117c39c7bd55fe130123f01cf60d300b8b57e9501c27c", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-linux-x64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:d80f384c182971724a7aa819173084e1d8244338fa8e9271a1961d38274d7209", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-darwin-arm64.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:d6d494e5deca973556e146555cdd29b927b0adb3cae2f234b8e1a92310657c39", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-darwin-x64.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:3c138ba2cd835b1af70ae2813422f544b2e786bdff8c0885ffb89fb7d407148e", url = "https://nodejs.org/dist/v25.3.0/node-v25.3.0-win-x64.zip"}
