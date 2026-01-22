@@ -1,4 +1,4 @@
-# Boxflow 📦
+# Boxflow Obsidian📦
 
 [![Obsidian Downloads](https://img.shields.io/badge/Obsidian-v0.15.0+-8c32ff?logo=obsidian&logoColor=white)](https://obsidian.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -51,8 +51,6 @@ Perfect for tracking your backlog, vinyl records, or travel bucket lists.
 
 Break down massive goals (like writing a book or finishing a thesis) into manageable, satisfying boxes.
 
----
-
 ## Usage
 
 ### Getting Started
@@ -74,8 +72,6 @@ Break down massive goals (like writing a book or finishing a thesis) into manage
 - **Rename Note**: Click the note title in the header to rename the file.
 - **Context Menu**: Right-click the view tab to access "Edit as Markdown" or "Delete Note".
 
----
-
 ## Installation
 
 ### Community Plugins
@@ -89,25 +85,10 @@ Break down massive goals (like writing a book or finishing a thesis) into manage
 2. Move them into your vault's plugin folder: `.obsidian/plugins/boxflow/`.
 3. Restart Obsidian.
 
----
-
-## Development & Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to set up the development environment and submit changes.
-
-### Local Setup
-
-```bash
-npm install
-npm run dev
-```
-
 ## Contributing
 
-We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our GitLab-first workflow.
-
----
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-MIT.
+See [LICENSE](LICENSE) for details.
