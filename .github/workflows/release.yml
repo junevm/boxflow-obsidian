@@ -33,7 +33,11 @@ jobs:
               run: pnpm install
 
             - name: Run Release
-              if: "!contains(github.event.head_commit.message, 'chore: release')"
+              if: |
+                  github.event_name == 'workflow_dispatch' || 
+                  (github.event_name == 'push' && 
+                  (startsWith(github.event.head_commit.message, 'feat') || 
+                   startsWith(github.event.head_commit.message, 'fix')))
               run: |
                   git config --global user.name "github-actions[bot]"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
