@@ -6,15 +6,15 @@
 		}
 	},
 	"git": {
-		"commitMessage": "chore: release v${version}",
-		"tagName": "v${version}",
+		"commitMessage": "chore: release ${version}",
+		"tagName": "${version}",
 		"push": true,
 		"requireCleanWorkingDir": false,
 		"addUntrackedFiles": true
 	},
 	"github": {
 		"release": true,
-		"releaseName": "v${version}",
+		"releaseName": "${version}",
 		"assets": ["main.js", "manifest.json", "styles.css"]
 	},
 	"npm": {
