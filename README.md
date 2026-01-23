@@ -20,6 +20,7 @@ Traditional task managers can feel like a chore. Boxflow turns your Obsidian not
 | ![Boxflow Demo](./assets/demo1.png) | ![Boxflow Demo 1](./assets/demo2.png) | ![Boxflow Demo 3](./assets/demo3.png) |
 | ----------------------------------- | ------------------------------------- | ------------------------------------- |
 
+
 ## ⚡ Key Features
 
 - **Modular Grids**: Organize tasks into categorized cards.
