@@ -1326,10 +1326,7 @@ export default class BoxflowPlugin extends Plugin {
 	 * Create a new boxflow note
 	 */
 	async createNewBoxflowNote() {
-		const fileName = await this.promptInput(
-			"Note name:",
-			"Untitled",
-		);
+		const fileName = await this.promptInput("Note name:", "Untitled");
 		if (!fileName) return;
 
 		const sanitizedName = fileName.replace(/[\\/:*?"<>|]/g, "-");
