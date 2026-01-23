@@ -17,6 +17,7 @@ import {
 	PluginSettingTab,
 	Setting,
 	TFile,
+	ViewStateResult,
 	WorkspaceLeaf,
 } from "obsidian";
 import React from "react";
@@ -24,6 +25,12 @@ import { createRoot, Root } from "react-dom/client";
 import { BoxflowGrid } from "./BoxflowGrid";
 import { BoxflowSettings, DEFAULT_SETTINGS } from "./settings";
 import { BoxflowData, Category, Grid } from "./types";
+
+interface ExtendedApp extends App {
+	plugins: {
+		getPlugin(id: string): Plugin | null;
+	};
+}
 
 class InputModal extends Modal {
 	private resolve: (result: string | null) => void;
@@ -36,7 +43,7 @@ class InputModal extends Modal {
 		title: string,
 		defaultValue: string,
 		resolve: (result: string | null) => void,
-		fieldName = "Name",
+		fieldName = "name",
 	) {
 		super(app);
 		this.setTitle(title);
@@ -126,7 +133,7 @@ class ConfirmModal extends Modal {
 }
 
 class BoxflowView extends ItemView {
-	private file: TFile | null = null;
+	public file: TFile | null = null;
 	private root: Root | null = null;
 
 	constructor(leaf: WorkspaceLeaf) {
@@ -145,9 +152,9 @@ class BoxflowView extends ItemView {
 		return this.file ? this.file.basename : "Boxflow";
 	}
 
-	async onOpen() {
+	onOpen() {
 		this.addAction("edit", "Edit as Markdown", () => {
-			this.plugin.setMarkdownMode(this.leaf);
+			void this.plugin.setMarkdownMode(this.leaf);
 		});
 
 		// Listen for file changes to update the view
@@ -188,12 +195,12 @@ class BoxflowView extends ItemView {
 				item.setTitle("Edit as Markdown")
 					.setIcon("lucide-file-text")
 					.onClick(() => {
-						this.plugin.setMarkdownMode(this.leaf);
+						void this.plugin.setMarkdownMode(this.leaf);
 					});
 			});
 
 			menu.addItem((item) => {
-				item.setTitle("Delete Note")
+				item.setTitle("Delete note")
 					.setIcon("lucide-trash-2")
 					.onClick(async () => {
 						const confirmed = await this.plugin.confirmDialog(
@@ -215,14 +222,17 @@ class BoxflowView extends ItemView {
 		}
 	}
 
-	async onClose() {
+	onClose() {
 		if (this.root) {
 			this.root.unmount();
 			this.root = null;
 		}
 	}
 
-	async setState(state: any, result: any): Promise<void> {
+	async setState(
+		state: Record<string, unknown>,
+		result: ViewStateResult,
+	): Promise<void> {
 		if (state.file) {
 			const file = this.app.vault.getAbstractFileByPath(
 				state.file as string,
@@ -301,31 +311,33 @@ class BoxflowView extends ItemView {
 		// Update Header content only
 		header.empty();
 		const titleEl = header.createEl("h1", { text: this.file.basename });
-		titleEl.addEventListener("click", async () => {
-			const newName = await this.plugin.promptInput(
-				"Rename note",
-				this.file!.basename,
-			);
-			if (newName && newName !== this.file!.basename) {
-				const extension = this.file!.extension;
-				const parentPath = this.file!.parent
-					? this.file!.parent.path
-					: "";
-				const newPath =
-					(parentPath === "/" || parentPath === ""
-						? ""
-						: parentPath + "/") +
-					newName +
-					"." +
-					extension;
-				await this.app.fileManager.renameFile(this.file!, newPath);
-			}
+		titleEl.addEventListener("click", () => {
+			void (async () => {
+				const newName = await this.plugin.promptInput(
+					"Rename note",
+					this.file!.basename,
+				);
+				if (newName && newName !== this.file!.basename) {
+					const extension = this.file!.extension;
+					const parentPath = this.file!.parent
+						? this.file!.parent.path
+						: "";
+					const newPath =
+						(parentPath === "/" || parentPath === ""
+							? ""
+							: parentPath + "/") +
+						newName +
+						"." +
+						extension;
+					await this.app.fileManager.renameFile(this.file!, newPath);
+				}
+			})();
 		});
 
 		const viewActions = header.createDiv("boxflow-view-actions");
 
 		const addCategoryBtn = viewActions.createEl("button", {
-			text: "+ Category",
+			text: "+ category",
 			cls: "mod-primary",
 		});
 		addCategoryBtn.addEventListener("click", () => {
@@ -336,20 +348,22 @@ class BoxflowView extends ItemView {
 			text: "Markdown",
 		});
 		editButton.addEventListener("click", () => {
-			this.plugin.setMarkdownMode(this.leaf);
+			void this.plugin.setMarkdownMode(this.leaf);
 		});
 
 		const deleteButton = viewActions.createEl("button", {
 			text: "Delete",
 			cls: "mod-warning",
 		});
-		deleteButton.addEventListener("click", async () => {
-			const confirmed = await this.plugin.confirmDialog(
-				`Are you sure you want to delete "${this.file!.basename}"?`,
-			);
-			if (confirmed) {
-				await this.app.fileManager.trashFile(this.file!);
-			}
+		deleteButton.addEventListener("click", () => {
+			void (async () => {
+				const confirmed = await this.plugin.confirmDialog(
+					`Are you sure you want to delete "${this.file!.basename}"?`,
+				);
+				if (confirmed) {
+					await this.app.fileManager.trashFile(this.file!);
+				}
+			})();
 		});
 
 		// Handle empty state
@@ -361,7 +375,7 @@ class BoxflowView extends ItemView {
 			gridsContainer.empty();
 			const empty = gridsContainer.createDiv("boxflow-empty");
 			empty.setText(
-				"No boxflow grids found. Click '+ Category' to start!",
+				"No boxflow grids found. Click '+ category' to start!",
 			);
 			return;
 		}
@@ -377,18 +391,30 @@ class BoxflowView extends ItemView {
 			return React.createElement(BoxflowGrid, {
 				key: grid.id || `grid-${index}`,
 				grid,
-				onToggleBox: (g: Grid, i: number) => this.toggleBox(g, i),
-				onAddBox: (g: Grid) => this.addBoxToGrid(g),
-				onAddBulk: (g: Grid) => this.addBoxesBulk(g),
-				onRemoveBox: (g: Grid, i: number) =>
-					this.removeBoxFromGrid(g, i),
-				onDeleteCategory: (id: string) => this.deleteCategory(id),
-				onRenameCategory: (id: string, name: string) =>
-					this.renameCategory(id, name),
-				onChangeColor: (id: string, color: string) =>
-					this.changeCategoryColor(id, color),
-				onMoveCategory: (draggedId: string, targetId: string) =>
-					this.moveCategory(draggedId, targetId),
+				onToggleBox: (g: Grid, i: number) => {
+					void this.toggleBox(g, i);
+				},
+				onAddBox: (g: Grid) => {
+					void this.addBoxToGrid(g);
+				},
+				onAddBulk: (g: Grid) => {
+					void this.addBoxesBulk(g);
+				},
+				onRemoveBox: (g: Grid, i: number) => {
+					void this.removeBoxFromGrid(g, i);
+				},
+				onDeleteCategory: (id: string) => {
+					void this.deleteCategory(id);
+				},
+				onRenameCategory: (id: string, name: string) => {
+					void this.renameCategory(id, name);
+				},
+				onChangeColor: (id: string, color: string) => {
+					void this.changeCategoryColor(id, color);
+				},
+				onMoveCategory: (draggedId: string, targetId: string) => {
+					void this.moveCategory(draggedId, targetId);
+				},
 				onShowMenu: (g: Grid, e: React.MouseEvent) =>
 					this.showCategoryMenu(g, e),
 				settings: {
@@ -447,20 +473,22 @@ class BoxflowView extends ItemView {
 		const menu = new Menu();
 
 		menu.addItem((item) => {
-			item.setTitle("Add Boxes in Bulk")
+			item.setTitle("Add boxes in bulk")
 				.setIcon("lucide-plus-square")
-				.onClick(() => this.addBoxesBulk(grid));
+				.onClick(() => {
+					void this.addBoxesBulk(grid);
+				});
 		});
 
 		menu.addItem((item) => {
-			item.setTitle("Rename Category")
+			item.setTitle("Rename category")
 				.setIcon("lucide-edit")
 				.onClick(async () => {
 					const newName = await this.plugin.promptInput(
-						"Rename Category",
+						"Rename category",
 						grid.categoryName,
 					);
-					if (newName) this.renameCategory(grid.id, newName);
+					if (newName) void this.renameCategory(grid.id, newName);
 				});
 		});
 
@@ -477,16 +505,20 @@ class BoxflowView extends ItemView {
 						grid.color === color ||
 							(!grid.color && color === "none"),
 					)
-					.onClick(() => this.changeCategoryColor(grid.id, color));
+					.onClick(() => {
+						void this.changeCategoryColor(grid.id, color);
+					});
 			});
 		});
 
 		menu.addSeparator();
 
 		menu.addItem((item) => {
-			item.setTitle("Delete Category")
+			item.setTitle("Delete category")
 				.setIcon("lucide-trash")
-				.onClick(() => this.deleteCategory(grid.id));
+				.onClick(() => {
+					void this.deleteCategory(grid.id);
+				});
 		});
 
 		menu.showAtMouseEvent(e.nativeEvent);
@@ -494,8 +526,8 @@ class BoxflowView extends ItemView {
 
 	private async addCategory() {
 		const name = await this.plugin.promptInput(
-			"Category Name:",
-			"New Category",
+			"Category name:",
+			"New category",
 		);
 		if (!name) return;
 
@@ -516,7 +548,7 @@ class BoxflowView extends ItemView {
 
 	private switchToMarkdownView() {
 		if (this.leaf) {
-			this.leaf.setViewState({
+			void this.leaf.setViewState({
 				type: "markdown",
 				state: { file: this.file!.path },
 			});
@@ -524,7 +556,9 @@ class BoxflowView extends ItemView {
 	}
 
 	get plugin(): BoxflowPlugin {
-		return (this.app as any).plugins.getPlugin("boxflow") as BoxflowPlugin;
+		return (this.app as unknown as ExtendedApp).plugins.getPlugin(
+			"boxflow",
+		) as BoxflowPlugin;
 	}
 
 	// Reuse parsing methods from plugin
@@ -553,36 +587,36 @@ export default class BoxflowPlugin extends Plugin {
 			this.boxflowPostProcessor.bind(this),
 		);
 
-		// Command to create new boxflow note
+		// Command to create new note
 		this.addCommand({
-			id: "create-boxflow-note",
-			name: "Create new boxflow note",
-			callback: async () => {
-				await this.createNewBoxflowNote();
+			id: "create-note",
+			name: "Create new note",
+			callback: () => {
+				void this.createNewBoxflowNote();
 			},
 		});
 
 		// Command to insert grid at cursor
 		this.addCommand({
 			id: "insert-grid",
-			name: "Insert boxflow grid",
+			name: "Insert grid",
 			editorCallback: (editor: Editor) => {
 				this.insertGridAtCursor(editor);
 			},
 		});
 
-		// Command to toggle between Boxflow and Markdown view
+		// Command to toggle between board and markdown view
 		this.addCommand({
 			id: "toggle-view",
-			name: "Toggle Boxflow / Markdown view",
+			name: "Toggle board/Markdown view",
 			callback: () => {
 				const leaf = this.app.workspace.getMostRecentLeaf();
 				if (!leaf) return;
 
 				if (leaf.view.getViewType() === "boxflow") {
-					this.setMarkdownMode(leaf);
+					void this.setMarkdownMode(leaf);
 				} else if (leaf.view instanceof MarkdownView) {
-					this.setBoxflowMode(leaf, leaf.view.file!);
+					void this.setBoxflowMode(leaf, leaf.view.file!);
 				}
 			},
 		});
@@ -595,13 +629,13 @@ export default class BoxflowPlugin extends Plugin {
 			this.app.workspace.on("file-menu", (menu, file) => {
 				if (file instanceof TFile) {
 					menu.addItem((item) => {
-						item.setTitle("Open as Boxflow board")
+						item.setTitle("Open as board")
 							.setIcon("check-square")
-							.onClick(async () => {
+							.onClick(() => {
 								const leaf =
 									this.app.workspace.getMostRecentLeaf();
 								if (leaf) {
-									await this.setBoxflowMode(leaf, file);
+									void this.setBoxflowMode(leaf, file);
 								}
 							});
 					});
@@ -611,24 +645,26 @@ export default class BoxflowPlugin extends Plugin {
 
 		// Listen for active leaf change to switch to boxflow view
 		this.registerEvent(
-			this.app.workspace.on("active-leaf-change", async (leaf) => {
+			this.app.workspace.on("active-leaf-change", (leaf) => {
 				if (!leaf) return;
 
-				const view = leaf.view;
-				const viewType = view.getViewType();
+				void (async () => {
+					const view = leaf.view;
+					const viewType = view.getViewType();
 
-				if (viewType === "markdown") {
-					const file = (view as any).file;
-					if (
-						file instanceof TFile &&
-						!this.explicitMarkdownLeaves.has(leaf) &&
-						(await this.isBoxflowNote(file))
-					) {
-						await this.setBoxflowMode(leaf, file);
+					if (viewType === "markdown") {
+						const file = (view as MarkdownView).file;
+						if (
+							file instanceof TFile &&
+							!this.explicitMarkdownLeaves.has(leaf) &&
+							(await this.isBoxflowNote(file))
+						) {
+							void this.setBoxflowMode(leaf, file);
+						}
+					} else if (viewType === "boxflow") {
+						this.explicitMarkdownLeaves.delete(leaf);
 					}
-				} else if (viewType === "boxflow") {
-					this.explicitMarkdownLeaves.delete(leaf);
-				}
+				})();
 			}),
 		);
 	}
@@ -637,7 +673,7 @@ export default class BoxflowPlugin extends Plugin {
 		const view = leaf.view;
 		if (!(view instanceof BoxflowView)) return;
 
-		const file = (view as any).file;
+		const file = view.file;
 		if (!(file instanceof TFile)) return;
 
 		this.explicitMarkdownLeaves.add(leaf);
@@ -985,20 +1021,30 @@ export default class BoxflowPlugin extends Plugin {
 		root.render(
 			React.createElement(BoxflowGrid, {
 				grid,
-				onToggleBox: (g: Grid, i: number) =>
-					this.toggleBox(g, i, sourcePath),
-				onAddBox: (g: Grid) => this.addBoxToGrid(g, sourcePath),
-				onAddBulk: (g: Grid) => this.addBoxesBulk(g, sourcePath),
-				onRemoveBox: (g: Grid, i: number) =>
-					this.removeBoxFromGrid(g, i, sourcePath),
-				onDeleteCategory: (id: string) =>
-					this.deleteCategoryByPath(id, sourcePath),
-				onRenameCategory: (id: string, name: string) =>
-					this.renameCategory(id, name, sourcePath),
-				onChangeColor: (id: string, color: string) =>
-					this.changeCategoryColor(id, color, sourcePath),
-				onMoveCategory: (draggedId: string, targetId: string) =>
-					this.moveCategory(draggedId, targetId, sourcePath),
+				onToggleBox: (g: Grid, i: number) => {
+					void this.toggleBox(g, i, sourcePath);
+				},
+				onAddBox: (g: Grid) => {
+					void this.addBoxToGrid(g, sourcePath);
+				},
+				onAddBulk: (g: Grid) => {
+					void this.addBoxesBulk(g, sourcePath);
+				},
+				onRemoveBox: (g: Grid, i: number) => {
+					void this.removeBoxFromGrid(g, i, sourcePath);
+				},
+				onDeleteCategory: (id: string) => {
+					void this.deleteCategoryByPath(id, sourcePath);
+				},
+				onRenameCategory: (id: string, name: string) => {
+					void this.renameCategory(id, name, sourcePath);
+				},
+				onChangeColor: (id: string, color: string) => {
+					void this.changeCategoryColor(id, color, sourcePath);
+				},
+				onMoveCategory: (draggedId: string, targetId: string) => {
+					void this.moveCategory(draggedId, targetId, sourcePath);
+				},
 				onShowMenu: (g: Grid, e: React.MouseEvent) =>
 					this.showCategoryMenu(g, e, sourcePath),
 				settings: {
@@ -1122,21 +1168,23 @@ export default class BoxflowPlugin extends Plugin {
 		const menu = new Menu();
 
 		menu.addItem((item) => {
-			item.setTitle("Add Boxes in Bulk")
+			item.setTitle("Add boxes in bulk")
 				.setIcon("lucide-plus-square")
-				.onClick(() => this.addBoxesBulk(grid, sourcePath));
+				.onClick(() => {
+					void this.addBoxesBulk(grid, sourcePath);
+				});
 		});
 
 		menu.addItem((item) => {
-			item.setTitle("Rename Category")
+			item.setTitle("Rename category")
 				.setIcon("lucide-edit")
 				.onClick(async () => {
 					const newName = await this.promptInput(
-						"Rename Category",
+						"Rename category",
 						grid.categoryName,
 					);
 					if (newName)
-						this.renameCategory(grid.id, newName, sourcePath);
+						void this.renameCategory(grid.id, newName, sourcePath);
 				});
 		});
 
@@ -1153,18 +1201,24 @@ export default class BoxflowPlugin extends Plugin {
 						grid.color === color ||
 							(!grid.color && color === "none"),
 					)
-					.onClick(() =>
-						this.changeCategoryColor(grid.id, color, sourcePath),
-					);
+					.onClick(() => {
+						void this.changeCategoryColor(
+							grid.id,
+							color,
+							sourcePath,
+						);
+					});
 			});
 		});
 
 		menu.addSeparator();
 
 		menu.addItem((item) => {
-			item.setTitle("Delete Category")
+			item.setTitle("Delete category")
 				.setIcon("lucide-trash")
-				.onClick(() => this.deleteCategoryByPath(grid.id, sourcePath));
+				.onClick(() => {
+					void this.deleteCategoryByPath(grid.id, sourcePath);
+				});
 		});
 
 		menu.showAtMouseEvent(e.nativeEvent);
@@ -1237,7 +1291,7 @@ export default class BoxflowPlugin extends Plugin {
 	/**
 	 * Insert grid at cursor position
 	 */
-	insertGridAtCursor(editor: any) {
+	insertGridAtCursor(editor: Editor) {
 		const cursor = editor.getCursor();
 
 		// Check if we're under a header
@@ -1253,7 +1307,7 @@ export default class BoxflowPlugin extends Plugin {
 		}
 
 		if (headerLine === -1) {
-			new Notice("Please place cursor under a header (## Header)");
+			new Notice("Please place cursor under a header (## header)");
 			return;
 		}
 
@@ -1270,8 +1324,8 @@ export default class BoxflowPlugin extends Plugin {
 	 */
 	async createNewBoxflowNote() {
 		const fileName = await this.promptInput(
-			"Boxflow note name:",
-			"Untitled Boxflow",
+			"Note name:",
+			"Untitled",
 		);
 		if (!fileName) return;
 
@@ -1288,7 +1342,7 @@ export default class BoxflowPlugin extends Plugin {
 				this.app.workspace.setActiveLeaf(leaf, { focus: true });
 			}
 		} catch (error) {
-			new Notice(`Failed to create note: ${error}`);
+			new Notice(`Failed to create note: ${String(error)}`);
 		}
 	}
 
@@ -1317,7 +1371,7 @@ export default class BoxflowPlugin extends Plugin {
 	async promptNumber(
 		message: string,
 		defaultValue: string,
-		fieldName = "Count",
+		fieldName = "count",
 	): Promise<number | null> {
 		const result = await this.promptInput(message, defaultValue, fieldName);
 		if (!result) return null;
@@ -1383,9 +1437,9 @@ class BoxflowSettingsTab extends PluginSettingTab {
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.showPercentage)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.showPercentage = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					}),
 			);
 
@@ -1403,9 +1457,9 @@ class BoxflowSettingsTab extends PluginSettingTab {
 						none: "Default",
 					})
 					.setValue(this.plugin.settings.accentColor)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.accentColor = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					}),
 			);
 	}
