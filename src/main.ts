@@ -152,7 +152,7 @@ class BoxflowView extends ItemView {
 		return this.file ? this.file.basename : "Boxflow";
 	}
 
-	onOpen() {
+	async onOpen() {
 		this.addAction("edit", "Edit as Markdown", () => {
 			void this.plugin.setMarkdownMode(this.leaf);
 		});
@@ -184,6 +184,8 @@ class BoxflowView extends ItemView {
 				}
 			}),
 		);
+
+		return Promise.resolve();
 	}
 
 	onPaneMenu(menu: Menu, source: string): void {
@@ -222,11 +224,12 @@ class BoxflowView extends ItemView {
 		}
 	}
 
-	onClose() {
+	async onClose() {
 		if (this.root) {
 			this.root.unmount();
 			this.root = null;
 		}
+		return Promise.resolve();
 	}
 
 	async setState(
