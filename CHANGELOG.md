@@ -1,5 +1,15 @@
 # Changelog
 
+# [1.4.0](https://github.com/junevm/boxflow-obsidian/compare/v1.3.0...1.4.0) (2026-02-12)
+
+
+### Features
+
+* **BoxflowView:** make onOpen and onClose methods asynchronous ([ff57a57](https://github.com/junevm/boxflow-obsidian/commit/ff57a57f1f39b1307d0844def3b07315cd85e1b4))
+* enhance BoxflowPlugin functionality ([8ee52cf](https://github.com/junevm/boxflow-obsidian/commit/8ee52cf0121ee455c4c0031dc58e6fe17197053d))
+* fix lint issues ([1598509](https://github.com/junevm/boxflow-obsidian/commit/159850913d86689c88c21368fc3f7e8636fe7b4f))
+* update demo image label for consistency in README ([65f6653](https://github.com/junevm/boxflow-obsidian/commit/65f6653c5dea211c89f12d817a6546c829c8e61c))
+
 # [1.3.0](https://github.com/junevm/boxflow-obsidian/compare/v1.2.0...v1.3.0) (2026-01-22)
 
 
